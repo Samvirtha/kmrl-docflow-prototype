@@ -13,6 +13,7 @@ import DocumentDetail from "./pages/DocumentDetail";
 import Notifications from "./pages/Notifications";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import "./styles/custom.css";
 
 const queryClient = new QueryClient();
 
@@ -23,16 +24,21 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <SidebarProvider>
-          <div className="flex min-h-screen w-full">
+          <div className="app-container">
             <AppSidebar />
-            <div className="flex-1 flex flex-col">
-              <header className="h-14 flex items-center border-b bg-background px-4">
-                <SidebarTrigger className="mr-4" />
-                <div className="flex-1">
-                  <h2 className="text-lg font-semibold text-primary">KMRL Document Management System</h2>
+            <div className="main-content">
+              <header className="header">
+                <div className="header-left">
+                  <SidebarTrigger className="mr-4" />
+                  <h2 className="header-title">KMRL Document Management System</h2>
+                </div>
+                <div className="header-right">
+                  <button className="btn login-btn">
+                    Login
+                  </button>
                 </div>
               </header>
-              <main className="flex-1 p-6 bg-muted/30">
+              <main className="main-area">
                 <Routes>
                   <Route path="/" element={<Welcome />} />
                   <Route path="/upload" element={<Upload />} />

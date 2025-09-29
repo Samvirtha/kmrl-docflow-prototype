@@ -43,47 +43,46 @@ export function AppSidebar() {
     return currentPath.startsWith(path);
   };
 
-  const getNavClass = (path: string) => {
-    const active = isActive(path);
-    return active 
-      ? "bg-primary text-primary-foreground font-medium" 
-      : "hover:bg-muted text-muted-foreground hover:text-foreground";
-  };
-
   return (
-    <Sidebar className={isCollapsed ? "w-16" : "w-64"} collapsible="icon">
-      <SidebarHeader className="border-b p-4">
+    <Sidebar className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+      <div style={{ padding: '16px', borderBottom: '1px solid #e2e8f0', textAlign: 'center' }}>
         {!isCollapsed && (
-          <div className="text-center">
-            <h2 className="text-lg font-bold text-primary">KMRL</h2>
-            <p className="text-sm text-muted-foreground">Document System</p>
+          <div>
+            <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#2563eb' }}>KMRL</h2>
+            <p style={{ fontSize: '12px', color: '#64748b' }}>Document System</p>
           </div>
         )}
         {isCollapsed && (
-          <div className="text-center">
-            <h2 className="text-lg font-bold text-primary">K</h2>
+          <div>
+            <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#2563eb' }}>K</h2>
           </div>
         )}
-      </SidebarHeader>
+      </div>
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel style={{ padding: '12px 16px', fontSize: '14px', fontWeight: '600', borderBottom: '1px solid #f1f5f9' }}>
+            Navigation
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigation.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url} 
-                      className={getNavClass(item.url)}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {!isCollapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              <ul className="nav-list">
+                {navigation.map((item) => (
+                  <li key={item.title} className="nav-item">
+                    <SidebarMenuButton asChild>
+                      <NavLink
+                        to={item.url}
+                        className={({ isActive: navIsActive }) =>
+                          `nav-link ${navIsActive || isActive(item.url) ? 'active' : ''}`
+                        }
+                      >
+                        <item.icon className="nav-icon" />
+                        {!isCollapsed && <span>{item.title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </li>
+                ))}
+              </ul>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

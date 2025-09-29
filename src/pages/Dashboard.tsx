@@ -4,9 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Filter, FileText, Calendar, User, Eye, AlertTriangle, CheckCircle, Clock } from "lucide-react";
+import { Search, Filter, FileText, Calendar, User, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
 
 const mockDocuments = [
   {
@@ -58,7 +57,6 @@ const mockDocuments = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
   
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -79,74 +77,54 @@ const Dashboard = () => {
     }
   };
 
-  const getRoleSpecificDescription = () => {
-    switch (user?.role) {
-      case 'admin':
-        return 'Admin Dashboard - Complete system overview with all departments and deadlines.';
-      case 'hod':
-        return `HOD Dashboard - ${user.department} department summary and document overviews.`;
-      case 'staff':
-        return `Staff Dashboard - ${user.department} overdue, completed and pending tasks.`;
-      default:
-        return 'Document Dashboard with summaries, filters, and search options.';
-    }
-  };
-
-  const getFilteredDocuments = () => {
-    if (user?.role === 'admin') return mockDocuments;
-    return mockDocuments.filter(doc => doc.department === user?.department);
-  };
-
-  const getStatsForRole = () => {
-    const filteredDocs = getFilteredDocuments();
-    const pendingCount = filteredDocs.filter(doc => doc.status === 'Pending').length;
-    const processedCount = filteredDocs.filter(doc => doc.status === 'Processed').length;
-    const overdue = 2; // Mock overdue count
-    const completed = processedCount;
-
-    if (user?.role === 'staff') {
-      return [
-        { icon: AlertTriangle, value: overdue, label: 'Overdue', color: 'text-danger' },
-        { icon: CheckCircle, value: completed, label: 'Completed', color: 'text-success' },
-        { icon: Clock, value: pendingCount, label: 'Pending', color: 'text-warning' },
-        { icon: FileText, value: filteredDocs.length, label: 'Total Assigned', color: 'text-primary' }
-      ];
-    }
-
-    return [
-      { icon: FileText, value: filteredDocs.length, label: user?.role === 'admin' ? 'Total Documents' : 'Department Docs', color: 'text-primary' },
-      { icon: Calendar, value: processedCount, label: 'Processed Today', color: 'text-success' },
-      { icon: User, value: pendingCount, label: 'Awaiting Review', color: 'text-warning' },
-      { icon: AlertTriangle, value: overdue, label: user?.role === 'admin' ? 'High Priority' : 'Overdue', color: 'text-danger' }
-    ];
-  };
-
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold">
-          {user?.role === 'admin' ? 'Admin Dashboard' : 
-           user?.role === 'hod' ? 'HOD Dashboard' : 'Staff Dashboard'}
-        </h1>
+        <h1 className="text-3xl font-bold">Document Dashboard</h1>
         <p className="text-muted-foreground">
-          {getRoleSpecificDescription()}
+          This is the Normal Dashboard. Shows list of documents with summaries, filters, and search options.
         </p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {getStatsForRole().map((stat, index) => (
-          <Card key={index}>
-            <CardContent className="p-6">
-              <div className="flex items-center gap-2">
-                <stat.icon className={`h-4 w-4 ${stat.color}`} />
-                <div className="text-2xl font-bold">{stat.value}</div>
-              </div>
-              <p className="text-sm text-muted-foreground">{stat.label}</p>
-            </CardContent>
-          </Card>
-        ))}
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-2">
+              <FileText className="h-4 w-4 text-primary" />
+              <div className="text-2xl font-bold">127</div>
+            </div>
+            <p className="text-sm text-muted-foreground">Total Documents</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-success" />
+              <div className="text-2xl font-bold">23</div>
+            </div>
+            <p className="text-sm text-muted-foreground">Processed Today</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-2">
+              <User className="h-4 w-4 text-warning" />
+              <div className="text-2xl font-bold">8</div>
+            </div>
+            <p className="text-sm text-muted-foreground">Awaiting Review</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-2">
+              <Badge className="h-4 w-4 text-danger" />
+              <div className="text-2xl font-bold">3</div>
+            </div>
+            <p className="text-sm text-muted-foreground">High Priority</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Search and Filters */}
@@ -216,7 +194,7 @@ const Dashboard = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {getFilteredDocuments().map((doc) => (
+              {mockDocuments.map((doc) => (
                 <TableRow key={doc.id}>
                   <TableCell className="font-mono text-sm">{doc.id}</TableCell>
                   <TableCell className="font-medium">{doc.title}</TableCell>

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FileText, Upload, Shield, Bell } from "lucide-react";
+import { FileText, Upload, Shield, Bell, LogIn } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Welcome = () => {
@@ -19,6 +19,16 @@ const Welcome = () => {
         </p>
         <div className="badge badge-info" style={{ marginTop: '16px', display: 'inline-flex' }}>
           Hackathon Prototype
+        </div>
+        <div style={{ marginTop: '24px' }}>
+          <Button 
+            size="lg" 
+            onClick={() => navigate('/login')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          >
+            <LogIn style={{ width: '20px', height: '20px' }} />
+            Login to Get Started
+          </Button>
         </div>
       </div>
 

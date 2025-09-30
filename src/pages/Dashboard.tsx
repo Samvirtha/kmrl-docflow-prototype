@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Search, Filter, FileText, Calendar, User, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const mockDocuments = [
   {
@@ -57,6 +58,7 @@ const mockDocuments = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { role } = useAuth();
   
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -81,9 +83,16 @@ const Dashboard = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold">Document Dashboard</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold">Document Dashboard</h1>
+          <Badge variant="outline" className="text-lg px-4 py-2">
+            Role: {role}
+          </Badge>
+        </div>
         <p className="text-muted-foreground">
-          This is the Normal Dashboard. Shows list of documents with summaries, filters, and search options.
+          {role === 'Admin' && 'Complete overview of all documents across all departments'}
+          {role === 'HOD' && 'Department document overview with bilingual support'}
+          {role === 'Staff' && 'Your assigned documents and tasks'}
         </p>
       </div>
 

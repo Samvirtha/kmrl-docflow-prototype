@@ -5,9 +5,12 @@ import {
   Shield, 
   FileText, 
   Bell, 
-  Info 
+  Info,
+  CheckCircle,
+  AlertCircle
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 import {
   Sidebar,
@@ -22,21 +25,48 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const navigation = [
-  { title: "Welcome", url: "/", icon: Home },
-  { title: "Upload Documents", url: "/upload", icon: Upload },
-  { title: "Document Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Compliance Dashboard", url: "/compliance", icon: Shield },
-  { title: "Document Details", url: "/document/sample", icon: FileText },
-  { title: "Notifications", url: "/notifications", icon: Bell },
-  { title: "About", url: "/about", icon: Info },
-];
+const getNavigationForRole = (role: string | null) => {
+  const commonItems = [
+    { title: "Notifications", url: "/notifications", icon: Bell },
+    { title: "Completed", url: "/completed", icon: CheckCircle },
+    { title: "Overdue", url: "/overdue", icon: AlertCircle },
+  ];
+
+  if (role === 'Admin') {
+    return [
+      { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+      { title: "Document Summary", url: "/document-summary", icon: FileText },
+      ...commonItems,
+      { title: "Compliance", url: "/compliance", icon: Shield },
+      { title: "Upload", url: "/upload", icon: Upload },
+      { title: "About", url: "/about", icon: Info },
+    ];
+  }
+
+  if (role === 'HOD') {
+    return [
+      { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+      { title: "Document Summary", url: "/document-summary", icon: FileText },
+      ...commonItems,
+      { title: "About", url: "/about", icon: Info },
+    ];
+  }
+
+  // Staff
+  return [
+    ...commonItems,
+    { title: "About", url: "/about", icon: Info },
+  ];
+};
 
 export function AppSidebar() {
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
   const location = useLocation();
   const currentPath = location.pathname;
+  const { role } = useAuth();
+  
+  const navigation = getNavigationForRole(role);
 
   const isActive = (path: string) => {
     if (path === "/") return currentPath === "/";

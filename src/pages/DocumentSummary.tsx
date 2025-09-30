@@ -4,52 +4,41 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { FileText, Building2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
-const mockSummary = [
-  {
+const documentSummaries = {
+  "DOC-1": {
+    id: "DOC-1",
     department: "Operations",
     departmentMalayalam: "പ്രവർത്തനങ്ങൾ",
-    total: 45,
-    pending: 12,
-    completed: 28,
-    overdue: 5
+    english: "The Operations Department issued a circular on metro station maintenance from October 5–10, 2025. Staff must follow revised shift timings and safety protocols, reporting any issues immediately.",
+    malayalam: "ഓപ്പറേഷൻസ് ഡിപ്പാർട്ട്മെന്റ് 2025 ഒക്ടോബർ 5–10 മെട്രോ സ്റ്റേഷൻ പരിപാലനത്തിന് സർകുലർ ഇറക്കി. സ്റ്റാഫ് പുതുക്കിയ ഷിഫ്റ്റ് സമയവും സുരക്ഷാ നിർദ്ദേശങ്ങളും പാലിച്ച് പ്രശ്നങ്ങൾ ഉടൻ റിപ്പോർട്ട് ചെയ്യണം.",
+    date: "October 5-10, 2025"
   },
-  {
-    department: "Finance",
-    departmentMalayalam: "ധനകാര്യം",
-    total: 32,
-    pending: 8,
-    completed: 22,
-    overdue: 2
+  "DOC-2": {
+    id: "DOC-2",
+    department: "Operations",
+    departmentMalayalam: "പ്രവർത്തനങ്ങൾ",
+    english: "The Operations Department has issued a circular regarding staff training on emergency response procedures scheduled for October 15, 2025. All personnel must attend and complete the training as per the guidelines.",
+    malayalam: "ഓപ്പറേഷൻസ് ഡിപ്പാർട്ട്മെന്റ് 2025 ഒക്ടോബർ 15 ന് ആപത്തുചുമതലകളുടെ പരിശീലനത്തിനുള്ള സർകുലർ ഇറക്കി. എല്ലാ സ്റ്റാഫും നിർദ്ദേശങ്ങൾ അനുസരിച്ച് പരിശീലനം പൂർണ്ണമാക്കണം.",
+    date: "October 15, 2025"
   },
-  {
-    department: "Legal",
-    departmentMalayalam: "നിയമപരം",
-    total: 28,
-    pending: 10,
-    completed: 16,
-    overdue: 2
-  },
-  {
-    department: "HR",
-    departmentMalayalam: "മനുഷ്യവിഭവശേഷി",
-    total: 19,
-    pending: 5,
-    completed: 13,
-    overdue: 1
-  },
-  {
-    department: "Maintenance",
-    departmentMalayalam: "പരിപാലനം",
-    total: 23,
-    pending: 7,
-    completed: 14,
-    overdue: 2
+  "DOC-3": {
+    id: "DOC-3",
+    department: "Engineering",
+    departmentMalayalam: "എഞ്ചിനീയറിംഗ്",
+    english: "The Engineering Department has issued a circular regarding inspection and maintenance of track equipment from October 8–12, 2025. All engineers must ensure compliance with maintenance protocols and report any faults immediately.",
+    malayalam: "എഞ്ചിനീയറിംഗ് ഡിപ്പാർട്ട്മെന്റ് 2025 ഒക്ടോബർ 8–12 ട്രാക്ക് ഉപകരണങ്ങളുടെ പരിശോധനയും പരിപാലനവും സംബന്ധിച്ച് സർകുലർ ഇറക്കി. എല്ലാ എഞ്ചിനീയർമാരും പരിപാലന മാർഗ്ഗനിർദ്ദേശങ്ങൾ പാലിച്ച് പ്രശ്നങ്ങൾ ഉടൻ റിപ്പോർട്ട് ചെയ്യണം.",
+    date: "October 8-12, 2025"
   }
-];
+};
 
 const DocumentSummary = () => {
   const { role } = useAuth();
   const isAdmin = role === 'Admin';
+  
+  // Determine which documents to show based on role
+  const visibleDocs = isAdmin 
+    ? ["DOC-1", "DOC-2", "DOC-3"] 
+    : ["DOC-1", "DOC-2"];
 
   return (
     <div className="space-y-6">
@@ -61,98 +50,40 @@ const DocumentSummary = () => {
         </h1>
         <p className="text-muted-foreground">
           {isAdmin 
-            ? 'Overview of all departments document status / എല്ലാ വകുപ്പുകളുടെയും രേഖകളുടെ അവസ്ഥ'
-            : 'Overview of document processing status / രേഖകളുടെ പ്രോസസ്സിംഗ് അവസ്ഥ'}
+            ? 'Overview of all departments circulars and documents / എല്ലാ വകുപ്പുകളുടെയും സർക്കുലറുകളും രേഖകളും'
+            : 'Overview of department circulars and documents / വകുപ്പ് സർക്കുലറുകളും രേഖകളും'}
         </p>
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-2xl font-bold text-blue-600">
-              {mockSummary.reduce((acc, dept) => acc + dept.total, 0)}
-            </div>
-            <p className="text-sm text-muted-foreground">Total Documents</p>
-            <p className="text-xs text-muted-foreground">മൊത്തം രേഖകൾ</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-2xl font-bold text-yellow-600">
-              {mockSummary.reduce((acc, dept) => acc + dept.pending, 0)}
-            </div>
-            <p className="text-sm text-muted-foreground">Pending</p>
-            <p className="text-xs text-muted-foreground">തീർപ്പാക്കാത്തവ</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-2xl font-bold text-green-600">
-              {mockSummary.reduce((acc, dept) => acc + dept.completed, 0)}
-            </div>
-            <p className="text-sm text-muted-foreground">Completed</p>
-            <p className="text-xs text-muted-foreground">പൂർത്തിയായവ</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-2xl font-bold text-red-600">
-              {mockSummary.reduce((acc, dept) => acc + dept.overdue, 0)}
-            </div>
-            <p className="text-sm text-muted-foreground">Overdue</p>
-            <p className="text-xs text-muted-foreground">കാലഹരണപ്പെട്ടവ</p>
-          </CardContent>
-        </Card>
+      {/* Document Summaries */}
+      <div className="space-y-4">
+        {visibleDocs.map((docId) => {
+          const doc = documentSummaries[docId as keyof typeof documentSummaries];
+          return (
+            <Card key={doc.id}>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-blue-600" />
+                    {doc.id} - {doc.department} / {doc.departmentMalayalam}
+                  </CardTitle>
+                  <Badge variant="outline">{doc.date}</Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground mb-2">English Summary:</h4>
+                  <p className="text-sm leading-relaxed">{doc.english}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground mb-2">Malayalam Summary / മലയാളം സംഗ്രഹം:</h4>
+                  <p className="text-sm leading-relaxed">{doc.malayalam}</p>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
-
-      {/* Department-wise Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Building2 className="h-5 w-5" />
-            Department-wise Status / വകുപ്പ് അനുസരിച്ചുള്ള സ്ഥിതി
-          </CardTitle>
-          <CardDescription>
-            Detailed breakdown by department / വകുപ്പ് അനുസരിച്ചുള്ള വിശദാംശങ്ങൾ
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Department / വകുപ്പ്</TableHead>
-                <TableHead>Total / മൊത്തം</TableHead>
-                <TableHead>Pending / തീർപ്പാക്കാത്തവ</TableHead>
-                <TableHead>Completed / പൂർത്തിയായവ</TableHead>
-                <TableHead>Overdue / കാലഹരണപ്പെട്ടവ</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {mockSummary.map((dept) => (
-                <TableRow key={dept.department}>
-                  <TableCell className="font-medium">
-                    <div>{dept.department}</div>
-                    <div className="text-xs text-muted-foreground">{dept.departmentMalayalam}</div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{dept.total}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge className="bg-yellow-500">{dept.pending}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge className="bg-green-500">{dept.completed}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="destructive">{dept.overdue}</Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
     </div>
   );
 };

@@ -39,7 +39,6 @@ const getNavigationForRole = (role: string | null) => {
       ...commonItems,
       { title: "Compliance", url: "/compliance", icon: Shield },
       { title: "Upload", url: "/upload", icon: Upload },
-      { title: "About", url: "/about", icon: Info },
     ];
   }
 
@@ -48,14 +47,12 @@ const getNavigationForRole = (role: string | null) => {
       { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
       { title: "Document Summary", url: "/document-summary", icon: FileText },
       ...commonItems,
-      { title: "About", url: "/about", icon: Info },
     ];
   }
 
   // Staff
   return [
     ...commonItems,
-    { title: "About", url: "/about", icon: Info },
   ];
 };
 

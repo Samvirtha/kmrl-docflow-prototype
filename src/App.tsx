@@ -54,15 +54,15 @@ const ProtectedLayout = () => {
           </header>
           <main className="main-area">
             <Routes>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/document-summary" element={<DocumentSummary />} />
-              <Route path="/compliance" element={<Compliance />} />
-              <Route path="/document/:id" element={<DocumentDetail />} />
-              <Route path="/notifications" element={<Notifications />} />
-              <Route path="/completed" element={<Completed />} />
-              <Route path="/overdue" element={<Overdue />} />
-              <Route path="/upload" element={<Upload />} />
-              <Route path="/about" element={<About />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="document-summary" element={<DocumentSummary />} />
+              <Route path="compliance" element={<Compliance />} />
+              <Route path="document/:id" element={<DocumentDetail />} />
+              <Route path="notifications" element={<Notifications />} />
+              <Route path="completed" element={<Completed />} />
+              <Route path="overdue" element={<Overdue />} />
+              <Route path="upload" element={<Upload />} />
+              <Route path="about" element={<About />} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </main>
